@@ -1,0 +1,7 @@
+#!/bin/bash
+
+make clobber
+make all
+cp dist/Release/Cygwin_4.x-Windows/findsic-hlbfgs_1 ..
+echo ""
+echo "FindSIC compiled and initialized on `date`"

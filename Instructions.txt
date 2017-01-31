@@ -1,0 +1,138 @@
+18-Sep-2014
+
+New solutions (unrefined in precision) are in the "Solutions" folder. The real components are listed first, then imaginary. They are not normalised. 
+
+Source code for the C++ sic finder that found those solutions is in "FindSic-HLBFGS_SRC", but I've pre-compiled it on Windows 7 with Cygwin in the main folder. 
+So it should work if you just uncompress and run in the main folder
+
+>findsic-hlbfgs_1.exe -h
+
+(at the command prompt) for instructions, or
+
+>findsic-hlbfgs_1.exe
+
+to find solutions.
+
+
+For speed, you're probably best off running it on a Linux box and then you need to re-compile. Instructions are as follows (same for Cygwin on windows, 
+except it needs "cygwin1.dll" to run). 
+
+In FindSic-HLBFGS_SRC, run
+
+>make clobber
+>make all
+
+The binary is then in the folder "dist/Release/Cygwin_4.x-Windows".
+
+Copy this binary and also
+
+SobolDefault   (for Sobol sequences - in main folder)
+new-joe-kuo-*    (for Sobol sequences - In main folder)
+cygwin1.dll     (Cygwin only - should be in the cygwin\bin folder)
+
+into a new folder and run, e.g.,
+
+>./findsic-hlbfgs_1 -s 0 -o 0 &
+>./findsic-hlbfgs_1 -s 1 -o 0 &
+>./findsic-hlbfgs_1 -s 2 -o 0 &
+>./findsic-hlbfgs_1 -s 3 -o 1 
+
+to get 4 parallel sic finders working together. Each one minimises the frame function on random trials of initial points, checking for a solution in the folder 
+after each trial, and moving to the next dimension if another sic finder has found a solution.
+
+There are lots of options to play with:
+
+ >./findsic-hlbfgs_1 -h
+
+Usage: findsics [options]
+Options:
+  -h                           Display this information
+  -f <output_file_prefix>      File prefix to write solutions [sicfid]
+  -d <start_dimension>         Starting dimension to begin search [2]
+  -e <frame_tolerance>         Allowed error tolerance in frame bound [1E-6]
+  -r <random_generator>        Pseudorandom number generator (0: Mersenne Twister, 1: Sobol sequence) [0]
+  -s <random_seed>             Number of random number calls for initialisation [0]
+  -t <sobol_file>              File for Sobol sequence direction numbers [SobolDefault]
+  -z <zauner_symmetry>         Restrict search to Zauner 1-eigenspace (0: off, 1: on) [1]
+  -o <output_level>            Level of output (0: none, 1: each new solution, 2: each trial) [1]
+  -p0 <p0>                     Number of LBFGS Hessian corrections (typically 3-20) [7]
+  -p1 <p1>                     Function tolerance used in line-search [1E-4]
+  -p2 <p2>                     Variable tolerance used in line-search [1E-16]
+  -p3 <p3>                     Gradient tolerance used in line-search [0.9]
+  -p4 <p4>                     Minimum step used in line-search [1E-20]
+  -p5 <p5>                     Maximum step used in line-search [1E+20]
+  -p6 <p6>                     Stop criterion ||G||/max(1,||X||) < p6 [0]
+  -p7 <p7>                     Stop criterion ||G|| < p7 [1E-5]
+  -p8 <p8>                     Maximum number of evaluations in line search [20]
+  -p9 <p9>                     L-BFGS strategy (0: standard, 1: M1QN3) [1]
+  -p10 <p10>                   Maximum number of iterations [100000]
+  -p11 <p11>                   Hessian update interval (typically 0-200) [10]
+  -p12 <p12>                   ICFS parameter [15]
+
+
+Standard output will look like:
+
+>./findsic-hlbfgs_1
+
+Options:
+  File prefix to write solutions = sicfid
+  Starting dimension to begin search = 2
+  Allowed error tolerance in frame bound = 1e-06
+  Pseudorandom number generator (0: Mersenne Twister, 1: Sobol sequence) = 0
+  Number of random number calls for initialisation = 0
+  File for Sobol sequence direction numbers = SobolDefault
+  Restrict search to Zauner 1-eigenspace (0: off, 1: on) = 1
+  Level of output (0: none, 1: each new solution, 2: each trial) = 1
+  Number of LBFGS Hessian corrections (typically 3-20) = 7
+  Function tolerance used in line-search = 0.0001
+  Variable tolerance used in line-search = 1e-16
+  Gradient tolerance used in line-search = 0.9
+  Minimum step used in line-search = 1e-20
+  Maximum step used in line-search = 1e+20
+  Stop criterion ||G||/max(1,||X||) < 0
+  Stop criterion ||G|| < 1e-05
+  Maximum number of evaluations in line search = 20
+  L-BFGS strategy (0: standard, 1: M1QN3) = 1
+  Maximum number of iterations = 100000
+  Hessian update interval (typically 0-200) = 10
+  ICFS parameter = 15
+d = 2, trials = 1, E = 0.0000000000000000e+00
+d = 3, trials = 1, E = 7.2198664824441039e-09
+d = 4, trials = 3, E = 1.4033219031261979e-13
+d = 5, trials = 2, E = 8.4776630160376953e-13
+d = 6, trials = 1, E = 3.3431035717512714e-12
+d = 7, trials = 2, E = 9.9742436532324064e-13
+d = 8, trials = 2, E = 5.6310511808987940e-13
+d = 9, trials = 2, E = 8.4066087424616853e-13
+d = 10, trials = 1, E = 6.5387695258323220e-12
+d = 11, trials = 1, E = 7.1054273576010019e-15
+d = 12, trials = 2, E = 3.0886404545071855e-12
+d = 13, trials = 13, E = 2.8421709430404007e-12
+d = 14, trials = 1, E = 9.0825125198534806e-12
+d = 15, trials = 1, E = 1.5654144647214707e-12
+d = 16, trials = 1, E = 2.1346924228282660e-11
+d = 17, trials = 2, E = 1.5818457654859230e-12
+d = 18, trials = 4, E = 1.1812772982011666e-13
+d = 19, trials = 2, E = 2.1418422591068520e-12
+d = 20, trials = 2, E = 1.2634338020234281e-12
+d = 21, trials = 4, E = 2.9709568138969189e-13
+d = 22, trials = 5, E = 1.7332801860447944e-12
+d = 23, trials = 13, E = 9.1571195071082911e-13
+d = 24, trials = 5, E = 6.8611782921834674e-13
+d = 25, trials = 1, E = 3.5331737535670982e-12
+d = 26, trials = 2, E = 1.9038104426272184e-12
+d = 27, trials = 1, E = 2.4238389073616418e-12
+d = 28, trials = 11, E = 2.1054269438991469e-11
+d = 29, trials = 3, E = 4.4462211690188269e-12
+
+
+The program is currently limited to dimensions up to 160. But you can easily increase this limit in the source code, if necessary. Or you can modify the source so 
+that it is unlimited in dimension (at a speed cost). I can show you how, but I doubt you will get that high.
+
+Some credits:
+
+http://research.microsoft.com/en-us/um/people/yangliu/software/hlbfgs/
+http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html
+http://web.maths.unsw.edu.au/~fkuo/sobol/
+
+Andrew Scott (dr.andrew.scott@gmail.com). 
